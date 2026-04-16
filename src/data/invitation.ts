@@ -87,12 +87,16 @@ export const storySteps = [
     text: "오늘 가져올 준비물은?",
     choices: [
       {
-        label: "신나는 마음",
-        feedback: "좋다. 근데 아직 덜 감동적이야.",
+        label: "슬픈 생각",
+        feedback: "엥?",
       },
       {
-        label: "축하하는 마음",
-        feedback: "모범 답안. 합격~!!",
+        label: "4단 케이크",
+        feedback: "생크림이랑 초코로 부탁해",
+      },
+      {
+        label: "신나는 마음",
+        feedback: "이거거든",
         isCorrect: true,
       },
     ],

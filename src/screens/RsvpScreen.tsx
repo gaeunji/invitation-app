@@ -1,26 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import confetti from "canvas-confetti";
 import { ScreenShell } from "../components/ScreenShell";
 import { invitation } from "../data/invitation";
-
-declare global {
-  interface Window {
-    Kakao?: {
-      isInitialized: () => boolean;
-      Share: {
-        sendDefault: (options: {
-          objectType: "text";
-          text: string;
-          link: {
-            mobileWebUrl: string;
-            webUrl: string;
-          };
-        }) => void;
-      };
-    };
-  }
-}
 
 const REWARDS = [
   { icon: "★", label: "EXP 획득", value: "+500 XP" },
@@ -30,6 +12,9 @@ const REWARDS = [
 
 export function RsvpScreen() {
   const [choice, setChoice] = useState<string | null>(null);
+  const [showClearScreen, setShowClearScreen] = useState(false);
+  const [shareMessage, setShareMessage] = useState<string | null>(null);
+  const clearTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const role = useMemo(() => {
     if (!choice) {
       return null;
@@ -39,12 +24,34 @@ export function RsvpScreen() {
     return invitation.rsvp.roles[roleIndex];
   }, [choice]);
 
+  const kakaoKey = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY as
+    | string
+    | undefined;
+
+  useEffect(
+    () => () => {
+      if (clearTimerRef.current) {
+        clearTimeout(clearTimerRef.current);
+      }
+    },
+    [],
+  );
+
+  function initializeKakao() {
+    if (!kakaoKey || !window.Kakao || window.Kakao.isInitialized()) {
+      return;
+    }
+
+    window.Kakao.init(kakaoKey);
+  }
+
   function handleChoice(option: string) {
     if (choice) {
       return;
     }
 
     setChoice(option);
+    clearTimerRef.current = setTimeout(() => setShowClearScreen(true), 420);
     confetti({
       particleCount: 120,
       spread: 80,
@@ -55,63 +62,104 @@ export function RsvpScreen() {
     });
   }
 
-  function handleKakaoShare() {
+  async function handleKakaoShare() {
     const text = `[QUEST CLEAR] 오늘의 역할은 ${role ?? "파티원"}입니다.`;
+    const shareUrl = window.location.href;
+    const imageUrl = new URL("/preview.png", window.location.origin).href;
+
+    initializeKakao();
 
     if (window.Kakao?.isInitialized()) {
       window.Kakao.Share.sendDefault({
-        objectType: "text",
-        text,
-        link: {
-          mobileWebUrl: window.location.href,
-          webUrl: window.location.href,
+        objectType: "feed",
+        content: {
+          title: "Birthday Invitation",
+          description: text,
+          imageUrl,
+          link: {
+            mobileWebUrl: shareUrl,
+            webUrl: shareUrl,
+          },
         },
+        buttons: [
+          {
+            title: "초대장 보기",
+            link: {
+              mobileWebUrl: shareUrl,
+              webUrl: shareUrl,
+            },
+          },
+        ],
       });
+      return;
     }
+
+    if (navigator.share) {
+      await navigator.share({
+        title: "Birthday Invitation",
+        text,
+        url: shareUrl,
+      });
+      return;
+    }
+
+    await navigator.clipboard.writeText(`${text} ${shareUrl}`);
+    setShareMessage("카카오 키가 없어서 링크를 복사했습니다.");
   }
 
   return (
-    <ScreenShell title={invitation.rsvp.title} progress={100}>
-      <div className="border-2 border-[#b99b64] bg-[#11100f] p-4">
-        <p className="mb-1 text-[13px] font-bold tracking-widest text-[#b99b64]">
-          ▶ FINAL QUEST #007
-        </p>
-        <p className="mb-4 text-[13px] leading-relaxed tracking-wide text-[#9a9080]">
-          참석 여부를 선택하여 퀘스트를 완료하세요.
-        </p>
-
-        <div className="grid gap-2.5">
-          {invitation.rsvp.choices.map((option, index) => {
-            const isSelected = choice === option;
-            const isDimmed = choice !== null && choice !== option;
-
-            return (
-              <button
-                key={option}
-                type="button"
-                onClick={() => handleChoice(option)}
-                disabled={isDimmed}
-                aria-pressed={isSelected}
-                className={`flex min-h-[52px] w-full items-center gap-3 border-2 px-4 text-[13px] font-bold tracking-wide transition-all duration-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5bd8a] active:scale-[0.99] ${
-                  isSelected
-                    ? "border-[#b99b64] bg-[#b99b64] text-[#11100f]"
-                    : isDimmed
-                      ? "cursor-not-allowed border-[#343029] text-[#555047]"
-                      : "border-[#b99b64] bg-[#1a1815] text-[#f2eadf] hover:bg-[#b99b64] hover:text-[#11100f]"
-                }`}
-              >
-                <span>▶</span>
-                <span className="flex-1">[ {option} ]</span>
-                <span>{index === 0 ? "★" : "✦"}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      <AnimatePresence>
-        {choice && role ? (
+    <ScreenShell
+      title={showClearScreen ? "최종 클리어" : invitation.rsvp.title}
+      progress={100}
+    >
+      <AnimatePresence mode="wait">
+        {!showClearScreen ? (
           <motion.div
+            key="rsvp-choice"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.28, ease: "easeOut" }}
+            className="border-2 border-[#b99b64] bg-[#11100f] p-4"
+          >
+            <p className="mb-1 text-[13px] font-bold tracking-widest text-[#b99b64]">
+              ▶ FINAL QUEST #007
+            </p>
+            <p className="mb-4 text-[13px] leading-relaxed tracking-wide text-[#9a9080]">
+              참석 여부를 선택하여 퀘스트를 완료하세요.
+            </p>
+
+            <div className="grid gap-2.5">
+              {invitation.rsvp.choices.map((option, index) => {
+                const isSelected = choice === option;
+                const isDimmed = choice !== null && choice !== option;
+
+                return (
+                  <button
+                    key={option}
+                    type="button"
+                    onClick={() => handleChoice(option)}
+                    disabled={choice !== null}
+                    aria-pressed={isSelected}
+                    className={`flex min-h-[52px] w-full items-center gap-3 border-2 px-4 text-[13px] font-bold tracking-wide transition-all duration-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5bd8a] active:scale-[0.99] ${
+                      isSelected
+                        ? "border-[#b99b64] bg-[#b99b64] text-[#11100f]"
+                        : isDimmed
+                          ? "cursor-not-allowed border-[#343029] text-[#555047]"
+                          : "border-[#b99b64] bg-[#1a1815] text-[#f2eadf] hover:bg-[#b99b64] hover:text-[#11100f]"
+                    }`}
+                  >
+                    <span>▶</span>
+                    <span className="flex-1">[ {option} ]</span>
+                    <span>{index === 0 ? "★" : "✦"}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </motion.div>
+        ) : choice && role ? (
+          <motion.div
+            key="rsvp-clear"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
@@ -165,6 +213,14 @@ export function RsvpScreen() {
               </svg>
               카카오톡으로 공유
             </button>
+            {shareMessage ? (
+              <p
+                aria-live="polite"
+                className="mt-2 text-center text-[10px] font-bold tracking-widest text-[#d5bd8a]"
+              >
+                {shareMessage}
+              </p>
+            ) : null}
             <p className="mt-1.5 text-center text-[10px] font-bold tracking-widest text-[#555047]">
               파티원에게 클리어 소식을 알립니다
             </p>

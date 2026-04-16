@@ -44,7 +44,7 @@ export function RevealScreen({ onRsvp }: RevealScreenProps) {
           </div>
         ))}
       </motion.div>
-      <PrimaryButton onClick={onRsvp}>명단 등록하러 가기</PrimaryButton>
+      <PrimaryButton onClick={onRsvp}>참석 확정하러 가기</PrimaryButton>
     </ScreenShell>
   );
 }

@@ -124,7 +124,7 @@ export function CardDrawScreen({ onComplete }: CardDrawScreenProps) {
       body={invitation.cardDraw.body}
       progress={phase === "success" ? 100 : 67}
     >
-      <div className="grid grid-cols-2 gap-3 border-2 border-[#343029] bg-[#1a1815] p-3">
+      <div className="grid grid-cols-2 justify-items-center gap-x-1 gap-y-3 border-2 border-[#343029] bg-[#1a1815] p-3">
         {cards.map((card, index) => {
           const isSelected = selectedCard?.id === card.id;
           const shouldHide =
@@ -150,7 +150,7 @@ export function CardDrawScreen({ onComplete }: CardDrawScreenProps) {
                 rotate: phase === "shuffling" ? [0, -2, 2, 0] : 0,
               }}
               transition={{ duration: 0.52, ease: "easeInOut" }}
-              className="group relative aspect-[2/3] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-offset-[#11100f] focus-visible:outline-[#d5bd8a] disabled:cursor-default"
+              className="group relative aspect-[3/4] w-full max-w-[140px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-offset-[#11100f] focus-visible:outline-[#d5bd8a] disabled:cursor-default"
               style={{ perspective: "900px" }}
             >
               <CardFace card={card} isFrontVisible={false} />
@@ -225,13 +225,13 @@ function CardFace({
       style={{ transformStyle: "preserve-3d" }}
     >
       <span
-        className="absolute inset-0 grid place-items-center border-2 border-[#b99b64] bg-[#11100f] p-3 text-center text-lg font-black text-[#d5bd8a] shadow-[0_14px_30px_rgba(0,0,0,0.24)] transition group-hover:-translate-y-1 group-hover:bg-[#1a1815]"
+        className="absolute inset-0 grid place-items-center rounded-2xl border-2 border-[#b99b64] bg-[#11100f] p-3 text-center text-lg font-black text-[#d5bd8a] shadow-[0_14px_30px_rgba(0,0,0,0.24)] transition group-hover:-translate-y-1 group-hover:bg-[#1a1815]"
         style={{ backfaceVisibility: "hidden" }}
       >
         ?
       </span>
       <span
-        className={`absolute inset-0 grid place-items-center border-2 p-3 text-center font-bold shadow-[0_14px_30px_rgba(0,0,0,0.24)] ${
+        className={`absolute inset-0 grid place-items-center rounded-2xl border-2 p-3 text-center font-bold shadow-[0_14px_30px_rgba(0,0,0,0.24)] ${
           card.isLucky
             ? "border-[#b99b64] bg-[#b99b64] text-[#11100f]"
             : "border-[#343029] bg-[#1a1815] text-[#bcb1a2]"
