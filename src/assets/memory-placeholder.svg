@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
+  <title id="title">Memory photo placeholder</title>
+  <desc id="desc">A warm birthday table with cake, candles, instant photos, and party lights.</desc>
+  <rect width="900" height="900" fill="#0e0f0c"/>
+  <rect x="70" y="80" width="760" height="740" rx="34" fill="#1a1815" stroke="#b99b64" stroke-width="18"/>
+  <circle cx="202" cy="181" r="42" fill="#8f6d55"/>
+  <circle cx="327" cy="135" r="32" fill="#b99b64"/>
+  <circle cx="691" cy="174" r="44" fill="#7f9a6b"/>
+  <path d="M149 317c87-65 180-79 279-42 105 39 208 33 319-18" fill="none" stroke="#ede6da" stroke-width="20" stroke-linecap="round"/>
+  <rect x="145" y="497" width="610" height="112" rx="24" fill="#151a13"/>
+  <rect x="203" y="401" width="494" height="128" rx="28" fill="#b99b64" stroke="#ede6da" stroke-width="14"/>
+  <path d="M222 409c51 53 105 53 162 0 51 53 105 53 162 0 49 51 99 53 151 8v81H222z" fill="#8f6d55"/>
+  <rect x="260" y="338" width="28" height="72" rx="10" fill="#0e0f0c"/>
+  <rect x="436" y="318" width="28" height="92" rx="10" fill="#0e0f0c"/>
+  <rect x="612" y="338" width="28" height="72" rx="10" fill="#0e0f0c"/>
+  <path d="M274 304c-25 31 22 39 0 0zm176-25c-25 31 22 39 0 0zm176 25c-25 31 22 39 0 0z" fill="#f97316"/>
+  <rect x="154" y="640" width="198" height="142" rx="18" fill="#211f1b" stroke="#b99b64" stroke-width="12" transform="rotate(-7 253 711)"/>
+  <rect x="549" y="632" width="198" height="142" rx="18" fill="#241c19" stroke="#b99b64" stroke-width="12" transform="rotate(8 648 703)"/>
+  <circle cx="250" cy="699" r="37" fill="#7f9a6b"/>
+  <path d="M598 722c38-53 83-53 122 0" fill="none" stroke="#ede6da" stroke-width="14" stroke-linecap="round"/>
+  <path d="M158 240h584" stroke="#b99b64" stroke-width="16" stroke-linecap="round" stroke-dasharray="2 42"/>
+</svg>
