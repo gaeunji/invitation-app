@@ -33,14 +33,18 @@ export function StoryScreen({ onDone }: StoryScreenProps) {
       }
 
       setStepIndex((current) => current + 1);
-    }, 1000);
+    }, 1500);
   }
 
   return (
     <ScreenShell
       title="2차 검문: 기억 테스트"
       body={`질문 ${stepIndex + 1} / ${storySteps.length}`}
-      progress={isAdvancing ? 33 + ((stepIndex + 1) / storySteps.length) * 34 : storyProgress}
+      progress={
+        isAdvancing
+          ? 33 + ((stepIndex + 1) / storySteps.length) * 34
+          : storyProgress
+      }
     >
       <motion.div
         key={stepIndex}

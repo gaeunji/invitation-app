@@ -86,15 +86,17 @@ export function CardDrawScreen({ onComplete }: CardDrawScreenProps) {
     }
 
     const rect = cardElement.getBoundingClientRect();
-    const centerX = window.innerWidth / 2 - (rect.left + rect.width / 2);
-    const centerY = window.innerHeight / 2 - (rect.top + rect.height / 2);
+    const cardCenterX = rect.left + rect.width / 2;
+    const cardCenterY = rect.top + rect.height / 2;
+    const viewportCenterX = window.innerWidth / 2;
+    const viewportCenterY = window.innerHeight / 2;
 
     setSelectedCard({
       id: card.id,
-      x: centerX,
-      y: centerY,
-      left: rect.left,
-      top: rect.top,
+      x: viewportCenterX - cardCenterX,
+      y: viewportCenterY - cardCenterY,
+      left: cardCenterX,
+      top: cardCenterY,
       width: rect.width,
       height: rect.height,
     });
@@ -136,7 +138,6 @@ export function CardDrawScreen({ onComplete }: CardDrawScreenProps) {
           return (
             <motion.button
               key={card.id}
-              layout
               ref={(element) => {
                 cardRefs.current[index] = element;
               }}
@@ -178,6 +179,8 @@ export function CardDrawScreen({ onComplete }: CardDrawScreenProps) {
             height: selectedCard.height,
             perspective: "900px",
             transformOrigin: "center",
+            marginLeft: -selectedCard.width / 2,
+            marginTop: -selectedCard.height / 2,
           }}
         >
           <CardFace

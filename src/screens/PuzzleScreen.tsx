@@ -72,7 +72,7 @@ export function PuzzleScreen({ onBack, onComplete }: PuzzleScreenProps) {
       return;
     }
 
-    const timer = window.setTimeout(onComplete, 1050);
+    const timer = window.setTimeout(onComplete, 1800);
     return () => window.clearTimeout(timer);
   }, [onComplete, solved]);
 
