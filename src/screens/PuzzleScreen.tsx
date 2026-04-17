@@ -332,9 +332,6 @@ export function PuzzleScreen({ onBack, onComplete }: PuzzleScreenProps) {
                         : "polygon(8% 8%, 38% 8%, 44% 0, 56% 0, 62% 8%, 92% 8%, 92% 38%, 100% 44%, 100% 56%, 92% 62%, 92% 92%, 62% 92%, 56% 100%, 44% 100%, 38% 92%, 8% 92%, 8% 62%, 0 56%, 0 44%, 8% 38%)",
                   }}
                 />
-                <span className="absolute right-2 top-2 z-10 grid h-6 w-6 place-items-center bg-[#b99b64] text-[11px] font-bold text-[#11100f]">
-                  {piece.correctIndex + 1}
-                </span>
               </button>
             );
           })}

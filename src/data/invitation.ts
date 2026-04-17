@@ -18,7 +18,7 @@ export const invitation = {
     title: "3차 검문: 행운의 카드 뽑기",
     body: "운빨 테스트",
     retry: "꽝. 다시 시도!",
-    success: "럭키카야의 행운이 깃들었습니다.",
+    success: "축하합니다. 럭키카야의 행운이 깃들었습니다.",
     cards: ["1번 카드", "2번 카드", "3번 카드", "4번 카드"],
   },
   party: {
@@ -40,15 +40,17 @@ export const invitation = {
       "케이크 경호원",
       "지가은 매니저",
       "팔리아치",
-      "보안 요원",
+      "음료 소믈리에",
       "기미상궁",
+      "MC",
+      "박수치는 물개",
     ],
   },
 };
 
 export const storySteps = [
   {
-    text: "스키장에 갔던 날짜는?",
+    text: "우리가 스키장에 갔던 날짜는?",
     choices: [
       {
         label: "12/26",
@@ -92,11 +94,11 @@ export const storySteps = [
       },
       {
         label: "4단 케이크",
-        feedback: "생크림이랑 초코로 부탁해",
+        feedback: "ㅇㅋ 생크림이랑 초코로 부탁해",
       },
       {
         label: "신나는 마음",
-        feedback: "이거거든",
+        feedback: "통과",
         isCorrect: true,
       },
     ],

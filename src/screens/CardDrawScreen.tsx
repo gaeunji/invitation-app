@@ -36,6 +36,14 @@ function shuffleCards(cards: Card[]) {
     ];
   }
 
+  if (
+    nextCards.length > 1 &&
+    nextCards.every((card, index) => card.id === cards[index].id)
+  ) {
+    const [firstCard, ...remainingCards] = nextCards;
+    return [...remainingCards, firstCard];
+  }
+
   return nextCards;
 }
 
@@ -134,10 +142,13 @@ export function CardDrawScreen({ onComplete }: CardDrawScreenProps) {
             (phase === "revealing" ||
               phase === "success" ||
               (phase === "returning" && isSelected));
+          const shuffleDirection = index % 2 === 0 ? -1 : 1;
+          const shuffleLift = index < 2 ? 1 : -1;
 
           return (
             <motion.button
               key={card.id}
+              layout
               ref={(element) => {
                 cardRefs.current[index] = element;
               }}
@@ -148,11 +159,30 @@ export function CardDrawScreen({ onComplete }: CardDrawScreenProps) {
               aria-pressed={isSelected}
               animate={{
                 opacity: shouldHide ? 0 : 1,
-                rotate: phase === "shuffling" ? [0, -2, 2, 0] : 0,
+                x:
+                  phase === "shuffling"
+                    ? [0, shuffleDirection * 18, shuffleDirection * -12, 0]
+                    : 0,
+                y:
+                  phase === "shuffling"
+                    ? [0, shuffleLift * 14, shuffleLift * -10, 0]
+                    : 0,
+                rotate:
+                  phase === "shuffling"
+                    ? [0, shuffleDirection * 8, shuffleDirection * -7, 0]
+                    : 0,
+                scale: phase === "shuffling" ? [1, 1.04, 0.98, 1] : 1,
               }}
-              transition={{ duration: 0.52, ease: "easeInOut" }}
+              transition={{
+                duration: 0.58,
+                ease: "easeInOut",
+                layout: { duration: 0.58, ease: "easeInOut" },
+              }}
               className="group relative aspect-[3/4] w-full max-w-[140px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-offset-[#11100f] focus-visible:outline-[#d5bd8a] disabled:cursor-default"
-              style={{ perspective: "900px" }}
+              style={{
+                perspective: "900px",
+                zIndex: phase === "shuffling" ? cards.length - index : "auto",
+              }}
             >
               <CardFace card={card} isFrontVisible={false} />
             </motion.button>
