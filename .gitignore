@@ -2,3 +2,6 @@
 vite-dev.err
 vite-dev.log
 
+# Build output and local tool caches
+dist/
+node_modules/.tmp/
