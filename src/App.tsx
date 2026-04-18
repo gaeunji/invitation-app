@@ -7,6 +7,8 @@ import { RevealScreen } from "./screens/RevealScreen";
 import { RsvpScreen } from "./screens/RsvpScreen";
 import { StoryScreen } from "./screens/StoryScreen";
 
+import { Analytics } from "@vercel/analytics/react";
+
 type Step = "intro" | "puzzle" | "story" | "card" | "reveal" | "rsvp";
 
 const screenVariants = {
@@ -53,6 +55,7 @@ function App() {
           </motion.div>
         </AnimatePresence>
       </div>
+      <Analytics />
     </main>
   );
 }
